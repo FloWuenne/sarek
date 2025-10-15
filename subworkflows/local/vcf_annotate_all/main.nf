@@ -3,6 +3,9 @@
 //
 
 include { BCFTOOLS_ANNOTATE                             } from '../../../modules/nf-core/bcftools/annotate'
+include { BCFTOOLS_FILTER                               } from '../../../modules/nf-core/bcftools/filter'
+include { BCFTOOLS_FILTER as BCFTOOLS_FILTER_VEP        } from '../../../modules/nf-core/bcftools/filter'
+include { BCFTOOLS_FILTER as BCFTOOLS_FILTER_MERGE      } from '../../../modules/nf-core/bcftools/filter'
 include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff'
@@ -56,20 +59,28 @@ workflow VCF_ANNOTATE_ALL {
         vcf_ann_for_merge = VCF_ANNOTATE_SNPEFF.out.vcf_tbi.map { meta, vcf_, _tbi -> [meta, vcf_, []] }
         VCF_ANNOTATE_MERGE(vcf_ann_for_merge, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
+        // Apply bcftools filter to merged (snpEff + VEP) annotated files to filter by PASS
+        BCFTOOLS_FILTER_MERGE(VCF_ANNOTATE_MERGE.out.vcf_tbi)
+
         reports = reports.mix(VCF_ANNOTATE_MERGE.out.reports)
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
+        vcf_ann = vcf_ann.mix(BCFTOOLS_FILTER_MERGE.out.vcf.join(BCFTOOLS_FILTER_MERGE.out.tbi, failOnDuplicate: true, failOnMismatch: true))
         versions = versions.mix(VCF_ANNOTATE_MERGE.out.versions)
+        versions = versions.mix(BCFTOOLS_FILTER_MERGE.out.versions)
     }
 
     if (tools.split(',').contains('vep')) {
         vcf_for_vep = vcf.map { meta, vcf_ -> [meta, vcf_, []] }
         VCF_ANNOTATE_ENSEMBLVEP(vcf_for_vep, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
+        // Apply bcftools filter to VEP annotated files to filter by PASS
+        BCFTOOLS_FILTER_VEP(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+
         reports = reports.mix(VCF_ANNOTATE_ENSEMBLVEP.out.reports)
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+        vcf_ann = vcf_ann.mix(BCFTOOLS_FILTER_VEP.out.vcf.join(BCFTOOLS_FILTER_VEP.out.tbi, failOnDuplicate: true, failOnMismatch: true))
         tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
         versions = versions.mix(VCF_ANNOTATE_ENSEMBLVEP.out.versions)
+        versions = versions.mix(BCFTOOLS_FILTER_VEP.out.versions)
     }
 
     emit:
