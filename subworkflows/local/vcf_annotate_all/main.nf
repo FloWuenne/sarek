@@ -3,6 +3,7 @@
 //
 
 include { BCFTOOLS_ANNOTATE                             } from '../../../modules/nf-core/bcftools/annotate'
+include { BCFTOOLS_FILTER                               } from '../../../modules/nf-core/bcftools/filter'
 include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff'
@@ -27,6 +28,7 @@ workflow VCF_ANNOTATE_ALL {
     main:
     reports = Channel.empty()
     vcf_ann = Channel.empty()
+    vcf_filtered = Channel.empty()
     tab_ann = Channel.empty()
     json_ann = Channel.empty()
     versions = Channel.empty()
@@ -59,6 +61,11 @@ workflow VCF_ANNOTATE_ALL {
         reports = reports.mix(VCF_ANNOTATE_MERGE.out.reports)
         vcf_ann = vcf_ann.mix(VCF_ANNOTATE_MERGE.out.vcf_tbi)
         versions = versions.mix(VCF_ANNOTATE_MERGE.out.versions)
+
+        // Filter merged annotated VCFs by PASS status
+        BCFTOOLS_FILTER(VCF_ANNOTATE_MERGE.out.vcf_tbi)
+        vcf_filtered = vcf_filtered.mix(BCFTOOLS_FILTER.out.vcf)
+        versions = versions.mix(BCFTOOLS_FILTER.out.versions)
     }
 
     if (tools.split(',').contains('vep')) {
@@ -70,12 +77,18 @@ workflow VCF_ANNOTATE_ALL {
         tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
         versions = versions.mix(VCF_ANNOTATE_ENSEMBLVEP.out.versions)
+
+        // Filter VEP annotated VCFs by PASS status
+        BCFTOOLS_FILTER(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+        vcf_filtered = vcf_filtered.mix(BCFTOOLS_FILTER.out.vcf)
+        versions = versions.mix(BCFTOOLS_FILTER.out.versions)
     }
 
     emit:
-    vcf_ann  // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
+    vcf_ann      // channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
+    vcf_filtered // channel: [ val(meta), vcf.gz, vcf.gz.tbi ] - PASS filtered VCFs
     tab_ann
     json_ann
-    reports  //    path: *.html
-    versions //    path: versions.yml
+    reports      //    path: *.html
+    versions     //    path: versions.yml
 }

@@ -1,0 +1,55 @@
+name: bcftools_filter
+description: Filters VCF files using expressions
+keywords:
+  - variant calling
+  - filter
+  - VCF
+tools:
+  - filter:
+      description: |
+        Apply fixed-threshold filters to VCF/BCF files.
+        Filters can be applied based on various criteria including FILTER column, INFO fields, and genotype information.
+      homepage: http://samtools.github.io/bcftools/bcftools.html
+      documentation: http://www.htslib.org/doc/bcftools.html
+      doi: 10.1093/bioinformatics/btp352
+      licence: ["MIT"]
+      identifier: biotools:bcftools
+input:
+  - - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+    - vcf:
+        type: file
+        description: VCF input file
+        pattern: "*.{vcf,vcf.gz,bcf,bcf.gz}"
+    - tbi:
+        type: file
+        description: |
+          The tab index for the VCF file to be filtered.
+        pattern: "*.{tbi,csi}"
+output:
+  - vcf:
+      - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+            e.g. [ id:'test', single_end:false ]
+      - "*.vcf.gz":
+          type: file
+          description: Filtered VCF output file
+          pattern: "*.vcf.gz"
+      - "*.vcf.gz.tbi":
+          type: file
+          description: Index of the filtered VCF output file
+          pattern: "*.vcf.gz.tbi"
+  - versions:
+      - versions.yml:
+          type: file
+          description: File containing software versions
+          pattern: "versions.yml"
+authors:
+  - "@FloWuenne"
+maintainers:
+  - "@FloWuenne"
