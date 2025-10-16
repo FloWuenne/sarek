@@ -63,3 +63,29 @@ results/
 2. **Organized output**: Filtered variants in dedicated subfolder  
 3. **Downstream analysis**: Ready-to-use high-quality variant sets
 4. **Flexible**: Can be extended to other filter criteria in the future
+
+## Testing Updates
+
+### Updated Test Files
+
+1. **`tests/annotation_merge.nf.test.snap`**:
+   - Added filtered directory and files to expected outputs for both merge test cases
+   - Updated version information to include BCFTOOLS_FILTER module
+   - Both `-profile test --tools merge` and `-profile test --tools merge,snpeff,vep` now expect filtered files
+
+2. **`tests/annotation_vep.nf.test`**:
+   - Added successful VEP annotation test case: `-profile test --tools vep`
+   - Retains existing failure test cases for validation
+
+### Expected Test Outputs
+
+For VEP annotation tests, the following additional files are now expected:
+- `annotation/test/filtered/` directory
+- `annotation/test/filtered/test_VEP.ann_filtered.vcf.gz`
+- `annotation/test/filtered/test_VEP.ann_filtered.vcf.gz.tbi`
+- `annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz` (for merge tests)
+- `annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz.tbi` (for merge tests)
+
+### Version Information
+
+Tests now expect BCFTOOLS_FILTER in the version output with bcftools 1.21.
