@@ -10,6 +10,15 @@ nextflow_pipeline {
 
     def test_scenario = [
         [
+            name: "-profile test --tools vep",
+            params: [
+                input: "${projectDir}/tests/csv/3.0/vcf_single.csv",
+                step: 'annotate',
+                vep_cache: 's3://annotation-cache/vep_cache/',
+                tools: 'vep'
+            ]
+        ],
+        [
             name: "Fails with profile test --tools vep --vep_cache_version 1 --build_only_index",
             params: [
                 input: "${projectDir}/tests/csv/3.0/vcf_single.csv",

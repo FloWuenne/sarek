@@ -1,8 +1,11 @@
 {
     "-profile test --tools merge,snpeff,vep": {
         "content": [
-            7,
+            8,
             {
+                "BCFTOOLS_FILTER": {
+                    "bcftools": 1.21
+                },
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": 115.2,
                     "tabix": 1.21
@@ -20,6 +23,11 @@
             [
                 "annotation",
                 "annotation/test",
+                "annotation/test/filtered",
+                "annotation/test/filtered/test_VEP.ann_filtered.vcf.gz",
+                "annotation/test/filtered/test_VEP.ann_filtered.vcf.gz.tbi",
+                "annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz",
+                "annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz.tbi",
                 "annotation/test/test_VEP.ann.vcf.gz",
                 "annotation/test/test_VEP.ann.vcf.gz.tbi",
                 "annotation/test/test_snpEff.ann.vcf.gz",
@@ -111,8 +119,11 @@
     },
     "-profile test --tools merge": {
         "content": [
-            5,
+            6,
             {
+                "BCFTOOLS_FILTER": {
+                    "bcftools": 1.21
+                },
                 "ENSEMBLVEP_VEP": {
                     "ensemblvep": 115.2,
                     "tabix": 1.21
@@ -130,6 +141,9 @@
             [
                 "annotation",
                 "annotation/test",
+                "annotation/test/filtered",
+                "annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz",
+                "annotation/test/filtered/test_snpEff_VEP.ann_filtered.vcf.gz.tbi",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
                 "csv",
