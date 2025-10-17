@@ -15,6 +15,9 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": 1.21
+                },
+                "VCFLIB_VCFFILTER": {
+                    "vcflib": "1.0.14"
                 }
             },
             [
@@ -26,6 +29,13 @@
                 "annotation/test/test_snpEff.ann.vcf.gz.tbi",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
+                "annotation/test/filtered",
+                "annotation/test/filtered/test_VEP.ann.PASS.vcf.gz",
+                "annotation/test/filtered/test_VEP.ann.PASS.vcf.gz.tbi",
+                "annotation/test/filtered/test_snpEff.ann.PASS.vcf.gz",
+                "annotation/test/filtered/test_snpEff.ann.PASS.vcf.gz.tbi",
+                "annotation/test/filtered/test_snpEff_VEP.ann.PASS.vcf.gz",
+                "annotation/test/filtered/test_snpEff_VEP.ann.PASS.vcf.gz.tbi",
                 "csv",
                 "multiqc",
                 "multiqc/multiqc_data",
@@ -100,7 +110,10 @@
             [
                 "test_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "test_snpEff.ann.vcf.gz:md5,fd266e623365c7d1837bc9eb088fe70c",
-                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_VEP.ann.PASS.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_snpEff.ann.PASS.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_snpEff_VEP.ann.PASS.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
         "meta": {
@@ -125,6 +138,9 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": 1.21
+                },
+                "VCFLIB_VCFFILTER": {
+                    "vcflib": "1.0.14"
                 }
             },
             [
@@ -132,6 +148,9 @@
                 "annotation/test",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz",
                 "annotation/test/test_snpEff_VEP.ann.vcf.gz.tbi",
+                "annotation/test/filtered",
+                "annotation/test/filtered/test_snpEff_VEP.ann.PASS.vcf.gz",
+                "annotation/test/filtered/test_snpEff_VEP.ann.PASS.vcf.gz.tbi",
                 "csv",
                 "multiqc",
                 "multiqc/multiqc_data",
@@ -199,7 +218,8 @@
             "No BAM files",
             "No CRAM files",
             [
-                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "test_snpEff_VEP.ann.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "test_snpEff_VEP.ann.PASS.vcf.gz:md5,d41d8cd98f00b204e9800998ecf8427e"
             ]
         ],
         "meta": {
