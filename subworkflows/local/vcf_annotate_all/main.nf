@@ -3,6 +3,7 @@
 //
 
 include { BCFTOOLS_ANNOTATE                             } from '../../../modules/nf-core/bcftools/annotate'
+include { BCFTOOLS_FILTER_PASS                          } from '../../../modules/local/bcftools_filter_pass'
 include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff'
@@ -65,11 +66,15 @@ workflow VCF_ANNOTATE_ALL {
         vcf_for_vep = vcf.map { meta, vcf_ -> [meta, vcf_, []] }
         VCF_ANNOTATE_ENSEMBLVEP(vcf_for_vep, fasta, vep_genome, vep_species, vep_cache_version, vep_cache, vep_extra_files)
 
+        // Filter VEP annotated VCFs by PASS status
+        BCFTOOLS_FILTER_PASS(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+
         reports = reports.mix(VCF_ANNOTATE_ENSEMBLVEP.out.reports)
-        vcf_ann = vcf_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi)
+        vcf_ann = vcf_ann.mix(BCFTOOLS_FILTER_PASS.out.vcf)
         tab_ann = tab_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.tab)
         json_ann = json_ann.mix(VCF_ANNOTATE_ENSEMBLVEP.out.json)
         versions = versions.mix(VCF_ANNOTATE_ENSEMBLVEP.out.versions)
+        versions = versions.mix(BCFTOOLS_FILTER_PASS.out.versions)
     }
 
     emit:

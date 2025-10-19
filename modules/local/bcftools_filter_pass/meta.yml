@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/meta-schema.json
+name: "bcftools_filter_pass"
+description: Filter VCF files to retain only variants with PASS status in FILTER column
+keywords:
+  - variant calling
+  - filtering
+  - vcf
+  - bcftools
+tools:
+  - "bcftools":
+      description: "BCFtools is a set of utilities that manipulate variant calls in the Variant Call Format (VCF) and its binary counterpart BCF"
+      homepage: "http://samtools.github.io/bcftools/bcftools.html"
+      documentation: "http://www.htslib.org/doc/bcftools.html"
+      doi: "10.1093/bioinformatics/btp352"
+      licence: ["MIT"]
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - vcf:
+      type: file
+      description: Input VCF file
+      pattern: "*.{vcf,vcf.gz}"
+  - tbi:
+      type: file
+      description: Index file for VCF
+      pattern: "*.{tbi,csi}"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - vcf:
+      type: file
+      description: Filtered VCF file containing only PASS variants
+      pattern: "*.filtered.vcf.gz"
+  - tbi:
+      type: file
+      description: Index file for filtered VCF
+      pattern: "*.filtered.vcf.gz.tbi"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+
+authors:
+  - "@seqera-ai"
+maintainers:
+  - "@seqera-ai"

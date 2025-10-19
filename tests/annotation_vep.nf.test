@@ -34,6 +34,18 @@ nextflow_pipeline {
             ],
             failure: true,
             stdout: "Execution halted due to dbnsfp inconsistency"
+        ],
+        [
+            name: "Test VEP annotation with PASS filtering functionality",
+            params: [
+                input: "${projectDir}/tests/csv/3.0/vcf_single.csv",
+                step: 'annotate',
+                vep_cache: 's3://annotation-cache/vep_cache/',
+                tools: 'vep',
+                outdir: 'results_vep_filter_test'
+            ],
+            failure: false,
+            stdout: "VCF_ANNOTATE_ALL:BCFTOOLS_FILTER_PASS"
         ]
     ]
 
